@@ -36,7 +36,6 @@ def learn(data: np.array):
         )
         for j in range(w.shape[0]):
             w[j, j] = 0
-        print(np.matmul(np.matmul(i.transpose(), w), i))
     return w
 
 
@@ -49,6 +48,14 @@ def train(data: np.array, w: np.array):
             index += 1
             train = activation(np.matmul(w, train), train)
             patterns.append(train)
+            print("iteration " + str(index))
+            print(train.shape, i.shape, w.shape)
+            print(
+                (
+                    -0.5 * np.matmul(np.matmul(train.transpose(), w), train)
+                    - np.matmul(train.transpose(), i)
+                )[0][0]
+            )
             if len(list(patterns)) == 3:
                 if np.array_equal(patterns[0], patterns[2]):
                     break
@@ -73,29 +80,27 @@ if __name__ == "__main__":
         for sample in train_output:
             for line in sample:
                 f.write(" ".join(list(map(str, list(map(int, line))))) + "\n")
-            f.write("\n")
-"""
-    # j = 0
-    # for sample in data:
-    #     dframe = []
-    #     j += 1
-    #     print("number of vector is ", j)
-    #     a = sample
-    #     for i in range(1, 36):
-    #         indexes = list(range(0, 7 * 5))
-    #         test = np.copy(sample)
-    #         # change input vector by 1, 2, 3.. 35 values
-    #         for _ in range(i):
-    #             index = random.choice(indexes)
-    #             indexes.remove(index)
-    #             test[index] = -test[index]
-    #         result = train(np.array([test]), weight)
-    #         print("count of errors in vector is ", i)
-    #         for _ in result:
-    #             _ = _.reshape(1, 7 * 5)
-    #             energy = np.matmul(np.matmul(_, weight), _.transpose())
-    #             out = i, energy[0][0]
-    #             dframe.append(out)
+            f.write("\n")"""
+    j = 0
+    for sample in data:
+        dframe = []
+        j += 1
+        print("number of vector is ", j)
+        a = sample
+        for i in range(1, 36):
+            indexes = list(range(0, 7 * 5))
+            test = np.copy(sample)
+            # change input vector by 1, 2, 3.. 35 values
+            for _ in range(i):
+                index = random.choice(indexes)
+                indexes.remove(index)
+                test[index] = -test[index]
+            result = train(np.array([test]), weight)
+            print("count of errors in vector is ", i)
+            for _ in result:
+                _ = _.reshape(1, 7 * 5)
+                out = i
+                # dframe.append(out)
 
-    #     df = pd.DataFrame(dframe)
-    #     df.to_csv("csv/result" + str(j) + ".csv")
+        # df = pd.DataFrame(dframe)
+        # df.to_csv("csv/result" + str(j) + ".csv")
